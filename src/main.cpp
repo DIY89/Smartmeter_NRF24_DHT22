@@ -13,7 +13,6 @@ void init_smart_meter(){
 
 }
 
-// Send data of DHT22 Sensor, SmartMeter Data and Current Power Voltage
 void send_data(){
 
 }
@@ -26,6 +25,7 @@ int main(){
     read_sml_data();
     //read_battery_voltage();
 
+    // Send data of DHT22 Sensor, SmartMeter Data and Current Power Voltage
     send_data();
 
     // Wait a few seconds between measurements.
