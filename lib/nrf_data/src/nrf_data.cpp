@@ -1,6 +1,10 @@
 #include "nrf_data.h"
 
-void init_nrf(){
+// instantiate an object for the nRF24L01 transceiver
+RF24 radio(CE_PIN, CSN_PIN);
+
+void init_nrf_data(void){
+  
 
     // initialize the transceiver on the SPI bus
   if (!radio.begin()) {
