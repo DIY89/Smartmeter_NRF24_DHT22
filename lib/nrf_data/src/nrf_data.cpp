@@ -26,7 +26,7 @@ void init_nrf_data(void){
   radio.openReadingPipe(1, address[!radioNumber]);  // using pipe 1
 }
 
-bool send_data(const void *data, uint8_t data_size){
+bool send_msg(const void *data, uint8_t data_size){
   unsigned long start_timer = micros();                // start the timer
   bool report = radio.write(data, data_size);  // transmit & save the report
   unsigned long end_timer = micros();                  // end the timer

@@ -26,6 +26,6 @@ static const bool role = false;  // true = TX role, false = RX role
 static float payload = 0.0;
 
 void init_nrf_data(void);
-bool send_data(const void* buf,uint8_t len);
+bool send_msg(const void* buf,uint8_t len);
 
 #endif
