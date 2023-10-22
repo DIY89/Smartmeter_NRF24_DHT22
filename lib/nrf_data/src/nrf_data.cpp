@@ -4,8 +4,6 @@
 RF24 radio(CE_PIN, CSN_PIN);
 
 void init_nrf_data(void){
-  
-
     // initialize the transceiver on the SPI bus
   if (!radio.begin()) {
     Serial.println(F("radio hardware is not responding!!"));

@@ -10,4 +10,10 @@
 #include <dht_data.h>
 #include <battery_data.h>
 
+#ifndef DEBUG 
+// set DEBUG to "true" to print out debug msg
+#undef DEBUG
+//#define DEBUG
+#endif 
+
 #endif
