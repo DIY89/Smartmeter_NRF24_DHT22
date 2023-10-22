@@ -9,6 +9,6 @@ extern float battery_voltage;
 
 void init_battery_data();
 
-void read_battery_voltage(float battery_voltage);
+void read_battery_voltage();
 
 #endif
