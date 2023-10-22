@@ -13,6 +13,8 @@ typedef struct{
  float humidity;
 }DHT_DATA;
 
+extern DHT_DATA dht_data; 
+
 void init_dht_data();
 void read_dht_data();
 
