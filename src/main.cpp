@@ -26,18 +26,18 @@ void generate_json_msg(){
   // Sensor 1 (DHT22)
   JsonObject sensor1 = sensors.createNestedObject();
   sensor1["type"] = "dht22";
-  sensor1["temperature"] = 22.45;
-  sensor1["humidity"] = 50.2;
+  sensor1["temperature"] = dht_data.temperature;
+  sensor1["humidity"] = dht_data.humidity;
 
   // Sensor 2 (Batterie)
   JsonObject sensor2 = sensors.createNestedObject();
   sensor2["type"] = "battery";
-  sensor2["voltage"] = 3.7;
+  sensor2["voltage"] = battery_voltage;
 
   // Sensor 3 (Smart Meter)
   JsonObject sensor3 = sensors.createNestedObject();
   sensor3["type"] = "smartmeter";
-  sensor3["current_pow"] = 120.5;
+  sensor3["current_pow"] = T1cur;
 
 #if defined(DEBUG)
   // Serialisieren und ausgeben
