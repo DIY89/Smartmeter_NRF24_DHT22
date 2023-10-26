@@ -22,6 +22,11 @@ void init_nrf_data(void){
 
   // set the RX address of the TX node into a RX pipe
   radio.openReadingPipe(1, address[!radioNumber]);  // using pipe 1
+
+#if defined(DEBUG)
+  // Serialisieren und ausgeben
+  radio.printPrettyDetails();
+#endif
 }
 
 bool send_msg(const void *data, uint8_t data_size){
