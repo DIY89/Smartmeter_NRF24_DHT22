@@ -3,8 +3,6 @@
 
 #include <Arduino.h>
 #include <ArduinoJson.h>
-#include <SPI.h>
-#include <printf.h>
 #include <sml_data.h>
 #include <nrf_data.h>
 #include <dht_data.h>

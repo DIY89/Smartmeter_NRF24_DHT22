@@ -1,33 +1,11 @@
-#ifndef NRF_DATA_H
-#define NRF_DATA_H 
+#ifndef SIMPLE_TEST_H
+#define SIMPLE_TEST_H
 
 #include <SPI.h>
-#include "printf.h"
 #include "RF24.h"
-#include "RF24Network.h"
-#include "nRF24L01.h"
 
-
-#define CE_PIN 7
-#define CSN_PIN 8
-
-class RF24Adapter {
- public:
-  RF24Adapter(RF24 &radio);
-    // ... Weitere Deklarationen Ihrer Methoden und Instanzen
-  int read();
-  size_t readBytes(char *buffer, size_t length);
-  size_t write(uint8_t c);
-  size_t write(const uint8_t *buffer, size_t length);
- private:
-  RF24 *_radio;
-};
-
-// Deklaration Ihrer RF24-Instanz
-extern RF24 radio;
-
-// Deklaration Ihrer RF24Adapter-Instanz
-extern RF24Adapter radioForArduinoJson;
+#define CE_PIN 9
+#define CSN_PIN 10
 
 // Let these addresses be used for the pair
 static const uint8_t address[][6] = { "1Node", "2Node" };
@@ -44,9 +22,9 @@ static const bool role = false;  // true = TX role, false = RX role
 // For this example, we'll be using a payload containing
 // a single float number that will be incremented
 // on every successful transmission
-static float payload = 0.0;
+//static float payload = 0.0;
 
-void init_nrf_data(void);
-//bool send_msg(const void* buf,uint8_t len);
+void init_nrf_test_data(void);
+void send_test_msg(const void *data, uint8_t data_size);
 
 #endif
