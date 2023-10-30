@@ -41,11 +41,6 @@ static const bool radioNumber = 1;  // 0 uses address[0] to transmit, 1 uses add
 // Used to control whether this node is sending or receiving
 static const bool role = false;  // true = TX role, false = RX role
 
-// For this example, we'll be using a payload containing
-// a single float number that will be incremented
-// on every successful transmission
-static float payload = 0.0;
-
 void init_nrf_data(void);
 //bool send_msg(const void* buf,uint8_t len);
 

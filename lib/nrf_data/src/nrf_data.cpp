@@ -33,6 +33,7 @@ class RF24Adapter {
 };
 */
 
+// RF24Adapter provides sending msg object byte by byte
 RF24Adapter::RF24Adapter(RF24 &radio) : _radio(&radio){ 
   // initialize the transceiver on the SPI bus
   if (!radio.begin()) {
@@ -43,15 +44,21 @@ RF24Adapter::RF24Adapter(RF24 &radio) : _radio(&radio){
   // each other.
   radio.setPALevel(RF24_PA_LOW);  // RF24_PA_MAX is default.
 
-  // save on transmission time by setting the radio to only transmit the
-  // number of bytes we need to transmit a float
-  radio.setPayloadSize(sizeof(payload));  // float datatype occupies 4 bytes
+  radio.enableAckPayload();
+  radio.enableDynamicPayloads();
+  radio.setAutoAck(true);
 
   // set the TX address of the RX node into the TX pipe
   radio.openWritingPipe(address[radioNumber]);  // always uses pipe 0
 
   // set the RX address of the TX node into a RX pipe
   radio.openReadingPipe(1, address[!radioNumber]);  // using pipe 1
+
+#if defined(DEBUG)
+  // Serialisieren und ausgeben
+  printf_begin();
+  radio.printPrettyDetails();
+#endif
 }
 
 int RF24Adapter::read() {
@@ -73,7 +80,7 @@ size_t RF24Adapter::write(const uint8_t *buffer, size_t length) {
     return _radio->write(buffer, static_cast<uint8_t>(length)) ? length : 0;
   } 
 
-
+/*
 void init_nrf_data(void){
     // initialize the transceiver on the SPI bus
   if (!radio.begin()) {
@@ -100,6 +107,7 @@ void init_nrf_data(void){
   radio.printPrettyDetails();
 #endif
 }
+*/
 
 /*
 bool send_msg(const void *data, uint8_t data_size){
