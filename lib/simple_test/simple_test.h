@@ -3,6 +3,7 @@
 
 #include <SPI.h>
 #include "RF24.h"
+#include "printf.h"
 
 #define CE_PIN 9
 #define CSN_PIN 10

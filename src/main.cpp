@@ -5,12 +5,14 @@
 // Inside the brackets, 200 is the RAM allocated to this document.
 // Don't forget to change this value to match your requirement.
 // Use https://arduinojson.org/v6/assistant to compute the capacity.
-
 StaticJsonDocument<200> msg;
 
 void setup(){
   // Initialize Serial Connection
   Serial.begin(9600);
+  //printf_begin();
+  radioForArduinoJson.init();
+  
  
   init_dht_data();
   init_sml_data();
@@ -18,7 +20,6 @@ void setup(){
 
   //init_nrf_test_data();
 }
-
 
 void generate_json_msg(){
   // JSON-Array "sensors"
@@ -68,28 +69,30 @@ void loop(){
   */
 
   while(true){
-    
     read_dht_data();
     read_sml_data();
     read_battery_voltage();
 
     generate_json_msg();
+
     /*
     // Send data of DHT22 Sensor, SmartMeter Data and Current Power Voltage
     send_msg(&msg, sizeof(msg));
-    */
+    
     //itoa(cnt,msg_str,10);
 
     //Serial.println(msg_str);
     //send_test_msg(&msg_str, sizeof(msg_str));
     // Wait a few seconds between measurements.
     //cnt++;
+    */
 
     // Sends json msg object via radioForArduinoJson (RF24Adapter) object
-    serializeJson(msg, radioForArduinoJson); // I get nothing like this : {}
+    serializeJson(msg, radioForArduinoJson);
+    
 #if defined(DEBUG)
-      // Serialisieren und ausgeben
-      serializeJson(msg, Serial);
+    // Serialisieren und ausgeben
+    serializeJson(msg, Serial);
 #endif
     delay(2000);
   }

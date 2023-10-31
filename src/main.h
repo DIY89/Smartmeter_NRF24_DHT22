@@ -10,8 +10,9 @@
 
 #ifndef DEBUG 
 // set DEBUG to "true" to print out debug msg
-#undef DEBUG
-//#define DEBUG
+//#undef DEBUG
+#define DEBUG true
 #endif 
+
 
 #endif

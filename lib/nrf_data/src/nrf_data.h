@@ -2,11 +2,10 @@
 #define NRF_DATA_H 
 
 #include <SPI.h>
-#include "printf.h"
 #include "RF24.h"
 #include "RF24Network.h"
 #include "nRF24L01.h"
-
+#include "printf.h"
 
 #define CE_PIN 7
 #define CSN_PIN 8
@@ -15,6 +14,8 @@ class RF24Adapter {
  public:
   RF24Adapter(RF24 &radio);
     // ... Weitere Deklarationen Ihrer Methoden und Instanzen
+
+  void init();
   int read();
   size_t readBytes(char *buffer, size_t length);
   size_t write(uint8_t c);
@@ -41,7 +42,7 @@ static const bool radioNumber = 1;  // 0 uses address[0] to transmit, 1 uses add
 // Used to control whether this node is sending or receiving
 static const bool role = false;  // true = TX role, false = RX role
 
-void init_nrf_data(void);
+//void init_nrf_data(void);
 //bool send_msg(const void* buf,uint8_t len);
 
 #endif
