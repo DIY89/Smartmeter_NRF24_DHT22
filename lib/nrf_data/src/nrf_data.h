@@ -7,8 +7,8 @@
 #include "nRF24L01.h"
 #include "printf.h"
 
-#define CE_PIN 7
-#define CSN_PIN 8
+#define CE_PIN 9
+#define CSN_PIN 10
 
 class RF24Adapter {
  public:

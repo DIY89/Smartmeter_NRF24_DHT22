@@ -19,6 +19,8 @@ void RF24Adapter::init(){
   // each other.
   radio.setPALevel(RF24_PA_LOW);  // RF24_PA_MAX is default.
 
+  //radio.setDataRate(RF24_250KBPS);
+
   radio.enableAckPayload();
   radio.enableDynamicPayloads();
   radio.setAutoAck(true);
@@ -32,7 +34,7 @@ void RF24Adapter::init(){
 #if defined(DEBUG)
   // Serialisieren und ausgeben
   printf_begin();
-  //radio.printPrettyDetails();
+  radio.printPrettyDetails();
 #endif
 }
 

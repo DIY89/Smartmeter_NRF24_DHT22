@@ -5,7 +5,7 @@
 // Analog Pin for battery voltage
 #define ANALOG_PIN A0
 
-extern float battery_voltage;
+extern double battery_voltage;
 
 void init_battery_data();
 

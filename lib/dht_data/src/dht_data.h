@@ -5,12 +5,12 @@
 #include <DHT.h>
 
 // DHT Sensor Config
-#define DHTPIN 5
+#define DHTPIN 2
 #define DHTTYPE DHT22
 
 typedef struct{
- float temperature;
- float humidity;
+ double temperature;
+ double humidity;
 }DHT_DATA;
 
 extern DHT_DATA dht_data; 
