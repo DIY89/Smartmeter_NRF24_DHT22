@@ -6,6 +6,7 @@
 #define ANALOG_PIN A0
 
 extern double battery_voltage;
+extern double battery_voltage_old;
 
 void init_battery_data();
 

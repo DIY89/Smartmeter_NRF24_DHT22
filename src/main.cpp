@@ -1,16 +1,34 @@
+#undef TEST_SUCCESS 
+//#define TEST 
+
+//#undef TEST1
+#define TEST1
+
 #include <main.h>
+
+#if defined(TEST_SUCCESS)
+#include <SPI.h>
+#include <RF24.h>
+#include "RF24Network.h"
+#include "nRF24L01.h"
+#include "printf.h"
+#endif
+
 
 // Allocate the JSON document
 //
 // Inside the brackets, 200 is the RAM allocated to this document.
 // Don't forget to change this value to match your requirement.
 // Use https://arduinojson.org/v6/assistant to compute the capacity.
+/*
 StaticJsonDocument<200> msg;
 JsonArray sensors = msg.createNestedArray("sensors");
 JsonObject sensor1 = sensors.createNestedObject();
 JsonObject sensor2 = sensors.createNestedObject();
 JsonObject sensor3 = sensors.createNestedObject();
+*/
 
+/*
 void generate_json_msg(){
   // JSON-Array "sensors"
   //JsonArray sensors = msg.createNestedArray("sensors");
@@ -32,84 +50,148 @@ void generate_json_msg(){
   sensor3["type"] = "smartmeter";
   sensor3["current_pow"] = "130"; //T1cur;
 }
+*/
+
+//MessageSender battery(NODE_ID,I_BAT,S_BAT);
+/*
+MessageSender temperature(NODE_ID,I_DHT,S_TEMP);
+MessageSender humidity(NODE_ID,I_DHT,S_HUM);
+MessageSender pow_cur(NODE_ID,I_POW,S_POW_CUR);
+MessageSender pow_sum(NODE_ID,I_POW,S_POW_SUM);
+*/
+#if defined(_SUCCESS)
+RF24 radio(9,10);
+static const uint8_t address[][6] = { "1Node", "2Node" };
+#endif
 
 void setup(){
   // Initialize Serial Connection
-  Serial.begin(9600);
-  //Serial.println("Init");
-  //printf_begin();
-  radioForArduinoJson.init();  
+  Serial.begin(BAUDRATE);
+  Serial.println("Init"); 
  
-  init_dht_data();
-  init_sml_data();
-  init_battery_data();
-  generate_json_msg();
+  Serial.println("Radio init");
+#if defined(TEST1)  
+	radioAdapter.init();
+#endif
+  //init_dht_data();
+  //init_sml_data();
+  //init_battery_data();
+  //generate_json_msg();
 
-  //init_nrf_test_data();
-}
+#if defined(TEST_SUCCESS)  
+  radio.begin();
 
-void convertToCharArray(double value, char *result){
-  int k;
-  char aux[10];
+  radio.setPayloadSize(32);
+  radio.setPALevel(RF24_PA_LOW);
 
-  itoa(value*100, aux, 10);
-  int n = strlen(aux);
-  k = 0;
-  for(int i=0;i<n;i++){
-    if(i == n-1 - 1){
-      result[k++] = '.';
-    }
-    result[k++] = aux[i];
-  }
-  result[k++] = '\0';
+  //#radio.setAutoAck(true);
+  //radio.enableAckPayload();
+  radio.enableDynamicPayloads();
+
+  radio.openWritingPipe(address[1]);  // always uses pipe 0
+
+  // set the RX address of the TX node into a RX pipe
+  //radio.openReadingPipe(1, address[!radioNumber]);  // using pipe 1
+
+#if defined(DEBUG)
+  // Serialisieren und ausgeben
+  printf_begin();
+  radio.printPrettyDetails();
+#endif
+#endif
 }
 
 void loop(){
-  //int cnt = 0;
-  //char msg_str[] = "hallo world";
-  //char msg_str[2];
-  
-  
-  //doc["var1"] = 50;
-  //doc["var2"] = 500;
 
   /*
   RF24Adapter radioForArduinoJson(radio_test); // Not sending 
   serializeJson(doc, radioForArduinoJson); // I get nothing like this : {}
   serializeJson(doc, Serial);
-  */
+
   //serializeJson(msg, radioForArduinoJson);
 
-  char usedBytes[2] = "";
+  //char usedBytes[2] = "";
   //char json_data_msg[400];
   //itoa(msg.memoryUsage(),usedBytes,10); // Erhalten Sie die genutzte Länge in Bytes
-  itoa(sizeof(measureJson(msg)),usedBytes,10); // Erhalten Sie die genutzte Länge in Bytes
-  Serial.print("Genutzte Länge (Bytes): ");
+  //itoa(sizeof(measureJson(msg)),usedBytes,10); // Erhalten Sie die genutzte Länge in Bytes
+  //Serial.print("Genutzte Länge (Bytes): ");
   //Serial.println(measureMsgPack(msg));
   
+
   char c_dht_temperature[10]; 
   char c_dht_humidity[10]; 
   char c_battery_voltage[10]; 
+  */
 
   while(true){
-    read_dht_data();
-    //Serial.print("Temperatur: ");
-    //Serial.print(dht_data.temperature);
-    //Serial.print(" | Humidity: ");
-    //Serial.println(dht_data.humidity);
-    convertToCharArray(dht_data.temperature, c_dht_temperature);
-    convertToCharArray(dht_data.humidity, c_dht_humidity);
-    sensor1["temperature"] = c_dht_temperature;
-    sensor1["humidity"] = c_dht_humidity;
+    /*read_dht_data();
 
+    temperature.doubleTochar(dht_data.temperature);
+    temperature.send();
+
+    humidity.doubleTochar(dht_data.humidity);
+    humidity.send();
+#ifdef DEBUG    
+    Serial.print("Temperatur: ");
+    Serial.print(dht_data.temperature);
+    Serial.print(" | Humidity: ");
+    Serial.println(dht_data.humidity);
+#endif
+*/
+    Serial.println("Read voltage");
     read_battery_voltage();
+    //if (battery_voltage_old != battery_voltage) {
+      Serial.println(battery_voltage);
+#if defined(TEST_SUCCESS)
+      //char test[6] = "Hallo";
+      //char test[6] = {'H','a','l','l','o'};
+      
+      String msg;
+      char test[20];
+      /*
+      test[0] = 'H';
+      test[1] = 'a';
+      test[2] = 'l';
+      test[3] = 'l';
+      test[4] = 'o';
+      test[5] = '\0';
+      */
+     uint8_t node_id = 1;
+     uint8_t sensor_id = 1;
+     uint8_t sensor_type = 1;
+     double val = 25.52;
+
+      // Msg format ( i=1,s=2,d=2,v=25.25	)
+      sprintf(test,"i=%d,s=%d,d=%d,v=", node_id, sensor_id, sensor_type);
+
+      String value(val,2);
+      Serial.print("MSG: ");
+      msg = test + value;
+      Serial.println(msg);
+
+      strcpy(test,msg.c_str());
+
+      Serial.println(test);
+      
+      if(radio.write(&test,sizeof(test))){
+        Serial.println("send");
+      }
+#endif  
+      //radioAdapter.send(&data,sizeof(data));	
+	    
+
+      //battery.store(battery_voltage);
+      //battery.send();
+      battery_voltage_old = battery_voltage;
+    //}
+    /*
     convertToCharArray(battery_voltage, c_battery_voltage);
     //Serial.print("Battery Voltage: ");
     //Serial.println(c_battery_voltage);
     sensor2["voltage"] = c_battery_voltage;
-    
-    read_sml_data();
-    sensor3["current_pow"] = "120"; //T1cur;
+    */
+    //read_sml_data();
+    //sensor3["current_pow"] = "120"; //T1cur;
     
     /*
     // Send data of DHT22 Sensor, SmartMeter Data and Current Power Voltage
@@ -132,13 +214,14 @@ void loop(){
 
 #if defined(DEBUG)
     // Serialisieren und ausgeben
-    serializeJson(msg, Serial);
-    Serial.println("");
+    //serializeJson(msg, Serial);
+    //Serial.println("loop");
     //Serial.println(json_data_msg);
 
 #endif
-    delay(20000);
+    delay(SLEEP_TIME);
   }
 }
+
 
 

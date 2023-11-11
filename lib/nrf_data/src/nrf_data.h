@@ -7,19 +7,16 @@
 #include "nRF24L01.h"
 #include "printf.h"
 
+#define DEBUG
+
 #define CE_PIN 9
 #define CSN_PIN 10
 
 class RF24Adapter {
  public:
   RF24Adapter(RF24 &radio);
-    // ... Weitere Deklarationen Ihrer Methoden und Instanzen
-
   void init();
-  int read();
-  size_t readBytes(char *buffer, size_t length);
-  size_t write(uint8_t c);
-  size_t write(const uint8_t *buffer, size_t length);
+  uint8_t send(const void *buf, uint8_t len);
  private:
   RF24 *_radio;
 };
@@ -28,7 +25,7 @@ class RF24Adapter {
 extern RF24 radio;
 
 // Deklaration Ihrer RF24Adapter-Instanz
-extern RF24Adapter radioForArduinoJson;
+extern RF24Adapter radioAdapter;
 
 // Let these addresses be used for the pair
 static const uint8_t address[][6] = { "1Node", "2Node" };

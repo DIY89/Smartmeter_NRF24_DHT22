@@ -1,6 +1,7 @@
 #include <battery_data.h>
 
 double battery_voltage = 0;
+double battery_voltage_old = 0;
 
 void init_battery_data(){
  //Initialize analog input
