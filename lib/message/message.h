@@ -10,25 +10,25 @@
 #define MAX_MSG_LEN 32
 
 typedef enum {
-	I_UNKNOWN = 0,
-	I_BAT 		= 1,
-  I_DHT 		= 2,
-	I_POW 		= 3,
+		I_UNKNOWN = 0,
+		I_BAT 		= 1,
+		I_DHT 		= 2,
+		I_POW 		= 3,
  } sensor_id;
 
 typedef enum {
-	S_UNKNOWN 	= 0,
-	S_BAT 			= 1,
-  S_TEMP  		= 2,    
-  S_HUM   		= 3,    
+		S_UNKNOWN 	= 0,
+		S_BAT 					= 1,
+  S_TEMP  			= 2,    
+  S_HUM   			= 3,    
   S_POW_CUR		= 4,
-	S_POW_SUM		= 5,
+		S_POW_SUM		= 5,
  } sensor_type;
 
 class MessageSender{
 public:
 	MessageSender(uint8_t nodeId, sensor_id sensorId, sensor_type sensorType);
-	void send() const;
+	bool send();
 	void store(const double value);
 
 private:

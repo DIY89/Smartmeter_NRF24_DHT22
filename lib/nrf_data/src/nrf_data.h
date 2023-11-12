@@ -16,7 +16,7 @@ class RF24Adapter {
  public:
   RF24Adapter(RF24 &radio);
   void init();
-  uint8_t send(const void *buf, uint8_t len);
+  bool send(const void *buf, uint8_t len);
  private:
   RF24 *_radio;
 };

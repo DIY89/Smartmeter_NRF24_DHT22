@@ -52,14 +52,15 @@ void generate_json_msg(){
 }
 */
 
-//MessageSender battery(NODE_ID,I_BAT,S_BAT);
-/*
-MessageSender temperature(NODE_ID,I_DHT,S_TEMP);
-MessageSender humidity(NODE_ID,I_DHT,S_HUM);
-MessageSender pow_cur(NODE_ID,I_POW,S_POW_CUR);
-MessageSender pow_sum(NODE_ID,I_POW,S_POW_SUM);
-*/
-#if defined(_SUCCESS)
+#if defined(TEST1)
+  MessageSender battery(NODE_ID,I_BAT,S_BAT);
+  MessageSender temperature(NODE_ID,I_DHT,S_TEMP);
+  MessageSender humidity(NODE_ID,I_DHT,S_HUM);
+  MessageSender pow_cur(NODE_ID,I_POW,S_POW_CUR);
+  MessageSender pow_sum(NODE_ID,I_POW,S_POW_SUM);
+#endif
+
+#if defined(TEST_SUCCESS)
 RF24 radio(9,10);
 static const uint8_t address[][6] = { "1Node", "2Node" };
 #endif
@@ -73,7 +74,7 @@ void setup(){
 #if defined(TEST1)  
 	radioAdapter.init();
 #endif
-  //init_dht_data();
+  init_dht_data();
   //init_sml_data();
   //init_battery_data();
   //generate_json_msg();
@@ -124,20 +125,21 @@ void loop(){
   */
 
   while(true){
-    /*read_dht_data();
+    read_dht_data();
 
-    temperature.doubleTochar(dht_data.temperature);
+    temperature.store(dht_data.temperature);
     temperature.send();
 
-    humidity.doubleTochar(dht_data.humidity);
+    humidity.store(dht_data.humidity);
     humidity.send();
+
 #ifdef DEBUG    
     Serial.print("Temperatur: ");
     Serial.print(dht_data.temperature);
     Serial.print(" | Humidity: ");
     Serial.println(dht_data.humidity);
 #endif
-*/
+    
     Serial.println("Read voltage");
     read_battery_voltage();
     //if (battery_voltage_old != battery_voltage) {
@@ -179,9 +181,10 @@ void loop(){
 #endif  
       //radioAdapter.send(&data,sizeof(data));	
 	    
-
-      //battery.store(battery_voltage);
-      //battery.send();
+      battery.store(battery_voltage);
+      if(battery.send()){
+        Serial.println("sending");
+      }
       battery_voltage_old = battery_voltage;
     //}
     /*
@@ -190,8 +193,13 @@ void loop(){
     //Serial.println(c_battery_voltage);
     sensor2["voltage"] = c_battery_voltage;
     */
-    //read_sml_data();
-    //sensor3["current_pow"] = "120"; //T1cur;
+    read_sml_data();
+    pow_cur.store(130);
+    pow_cur.send();
+
+    pow_sum.store(2000);
+    pow_sum.send();
+    
     
     /*
     // Send data of DHT22 Sensor, SmartMeter Data and Current Power Voltage

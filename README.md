@@ -18,11 +18,13 @@ Reads following sensor data
 Telegram structure in JSON format (// old)
  {
   "sensor": {
+    "id":"1",
     "type":"dht22",
     "temperature: "xx.xx",
     "humidity: "xx.xx"
   }
   "sensor":{
+   "id":"2",
    "type": "battery",
    "voltage": xx.xx"
   }

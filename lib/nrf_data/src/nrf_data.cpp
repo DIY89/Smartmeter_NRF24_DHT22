@@ -21,7 +21,7 @@ void RF24Adapter::init(){
   radio.setDataRate(RF24_1MBPS);
 
   //radio.enableAckPayload();
-  //radio.enableDynamicPayloads();
+  radio.enableDynamicPayloads();
   //radio.setAutoAck(true);
   radio.setAutoAck(false);
 
@@ -38,8 +38,8 @@ void RF24Adapter::init(){
 #endif
 }
 
-uint8_t RF24Adapter::send(const void *buf, uint8_t len){
-  return _radio->write(&buf, len);
+bool RF24Adapter::send(const void *buf, uint8_t len){
+  return _radio->write(buf, len);
 }
 
 /*

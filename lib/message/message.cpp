@@ -26,13 +26,15 @@ void MessageSender::store(double v) {
 	value = v;
 }
 
-void MessageSender::send() const{
+bool MessageSender::send(){
 	char data[MAX_MSG_LEN];
+	//uint8_t len = 0;
 
 	String value(this->value,2);
 	String msg;
 
 	// Msg format ( i=1,s=2,d=2,v=25.25	)
+	data[0] = '\0';
 	sprintf(data,"i=%d,s=%d,d=%d,v=", this->node_id, this->s_id, this->s_type);
 
 #if defined(DEBUG)
@@ -47,21 +49,30 @@ void MessageSender::send() const{
 
 	Serial.print("MSG: ");
 	msg = data + value;
-	Serial.println(msg);
+	//Serial.println(msg);
 
 	strcpy(data,msg.c_str());
 
 	Serial.println(data);
 #endif
 
-	Serial.print("Msg Size: ");
- 	Serial.println(sizeof(data));
+	//Serial.print("Msg Size: ");
+	//Serial.println(sizeof(data));
 
-	char test[6] = "Hallo";
+	//char test[6] = "Hallo";
+	//if(radioAdapter.send(&test,sizeof(test))){
+	//Serial.println(test);
+		
 
-	//radioAdapter.send(&data,sizeof(data));	
-	radioAdapter.send(&test,sizeof(test));	
-};
+	Serial.print("Lange: ");
+	Serial.println(msg.length());
+
+	if(radioAdapter.send(&data,msg.length())){	
+		return true;
+	}else{
+		return false;
+	}
+}
 
 /*
 void MessageSender::doubleTochar(double value){
