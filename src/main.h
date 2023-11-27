@@ -9,7 +9,7 @@
 #include "battery_data.h"
 #include "message.h"
 
-uint32_t SLEEP_TIME = 10000;  // sleep time between reads (seconds * 1000 milliseconds)
+uint32_t SLEEP_TIME = 5000;  // sleep time between reads (seconds * 1000 milliseconds)
 
 #define BAUDRATE 9600
 

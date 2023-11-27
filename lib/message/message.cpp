@@ -54,6 +54,9 @@ bool MessageSender::send(){
 	strcpy(data,msg.c_str());
 
 	Serial.println(data);
+
+	Serial.print("Lange: ");
+	Serial.println(msg.length());
 #endif
 
 	//Serial.print("Msg Size: ");
@@ -64,8 +67,6 @@ bool MessageSender::send(){
 	//Serial.println(test);
 		
 
-	Serial.print("Lange: ");
-	Serial.println(msg.length());
 
 	if(radioAdapter.send(&data,msg.length())){	
 		return true;

@@ -1,12 +1,12 @@
-#undef TEST_SUCCESS 
+#undef SIMPLE_RADIO_TEST 
 //#define TEST 
 
-//#undef TEST1
-#define TEST1
+//#undef FINAL_TEST
+#define FINAL_TEST
 
-#include <main.h>
+#include "main.h"
 
-#if defined(TEST_SUCCESS)
+#if defined(SIMPLE_RADIO_TEST)
 #include <SPI.h>
 #include <RF24.h>
 #include "RF24Network.h"
@@ -52,7 +52,7 @@ void generate_json_msg(){
 }
 */
 
-#if defined(TEST1)
+#if defined(FINAL_TEST)
   MessageSender battery(NODE_ID,I_BAT,S_BAT);
   MessageSender temperature(NODE_ID,I_DHT,S_TEMP);
   MessageSender humidity(NODE_ID,I_DHT,S_HUM);
@@ -60,9 +60,9 @@ void generate_json_msg(){
   MessageSender pow_sum(NODE_ID,I_POW,S_POW_SUM);
 #endif
 
-#if defined(TEST_SUCCESS)
-RF24 radio(9,10);
-static const uint8_t address[][6] = { "1Node", "2Node" };
+#if defined(SIMPLE_RADIO_TEST)
+  RF24 radio(9,10);
+  static const uint8_t address[][6] = { "1Node", "2Node" };
 #endif
 
 void setup(){
@@ -70,16 +70,17 @@ void setup(){
   Serial.begin(BAUDRATE);
   Serial.println("Init"); 
  
+  
+#if defined(FINAL_TEST)  
   Serial.println("Radio init");
-#if defined(TEST1)  
 	radioAdapter.init();
 #endif
   init_dht_data();
-  //init_sml_data();
-  //init_battery_data();
-  //generate_json_msg();
+  init_sml_data();
+  init_battery_data();
+  // generate_json_msg();
 
-#if defined(TEST_SUCCESS)  
+#if defined(SIMPLE_RADIO_TEST)  
   radio.begin();
 
   radio.setPayloadSize(32);
@@ -124,27 +125,32 @@ void loop(){
   char c_battery_voltage[10]; 
   */
 
-  while(true){
-    read_dht_data();
+  read_dht_data();
 
-    temperature.store(dht_data.temperature);
-    temperature.send();
+  temperature.store(dht_data.temperature);
+  temperature.send();
 
-    humidity.store(dht_data.humidity);
-    humidity.send();
+  humidity.store(dht_data.humidity);
+  humidity.send();
 
-#ifdef DEBUG    
-    Serial.print("Temperatur: ");
-    Serial.print(dht_data.temperature);
-    Serial.print(" | Humidity: ");
-    Serial.println(dht_data.humidity);
+#ifdef DEBUG  
+  Serial.print("Temperatur: ");
+  Serial.print(dht_data.temperature);
+  Serial.print(" | Humidity: ");
+  Serial.println(dht_data.humidity);
 #endif
     
-    Serial.println("Read voltage");
-    read_battery_voltage();
-    //if (battery_voltage_old != battery_voltage) {
-      Serial.println(battery_voltage);
-#if defined(TEST_SUCCESS)
+  read_battery_voltage();
+  
+  if (battery_voltage_old != battery_voltage) {
+#ifdef DEBUG      
+    Serial.print("Battery voltage: ");
+    Serial.println(battery_voltage);
+#endif      
+    battery.store(battery_voltage);
+    battery.send();
+  }
+#if defined(SIMPLE_RADIO_TEST)
       //char test[6] = "Hallo";
       //char test[6] = {'H','a','l','l','o'};
       
@@ -179,26 +185,37 @@ void loop(){
         Serial.println("send");
       }
 #endif  
-      //radioAdapter.send(&data,sizeof(data));	
-	    
-      battery.store(battery_voltage);
-      if(battery.send()){
-        Serial.println("sending");
-      }
-      battery_voltage_old = battery_voltage;
-    //}
-    /*
-    convertToCharArray(battery_voltage, c_battery_voltage);
-    //Serial.print("Battery Voltage: ");
-    //Serial.println(c_battery_voltage);
-    sensor2["voltage"] = c_battery_voltage;
-    */
-    read_sml_data();
-    pow_cur.store(130);
-    pow_cur.send();
 
-    pow_sum.store(2000);
-    pow_sum.send();
+  //radioAdapter.send(&data,sizeof(data));	
+  /*
+  battery.store(battery_voltage);
+  if(battery.send()){
+    //Serial.println("sending");
+  }
+  battery_voltage_old = battery_voltage;
+  */
+  //}
+  /*
+  convertToCharArray(battery_voltage, c_battery_voltage);
+  //Serial.print("Battery Voltage: ");
+  //Serial.println(c_battery_voltage);
+  sensor2["voltage"] = c_battery_voltage;
+  */
+  read_sml_data();
+   
+
+  if(T1cur != T1cur_old){
+#if defined(DEBUG)      
+  Serial.print("Current Power: ");
+  Serial.println(T1cur);
+#endif
+  T1cur_old = T1cur;
+
+  pow_sum.store(2000);
+  pow_sum.send();
+  }
+
+    
     
     
     /*
@@ -227,8 +244,8 @@ void loop(){
     //Serial.println(json_data_msg);
 
 #endif
-    delay(SLEEP_TIME);
-  }
+    //delay(SLEEP_TIME);
+  //}
 }
 
 

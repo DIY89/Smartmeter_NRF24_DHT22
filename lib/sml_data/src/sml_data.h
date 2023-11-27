@@ -6,12 +6,13 @@
 
 #define MAX_BUF_SIZE 400
 #define MAX_STR_MANUF 5
-// Continuously loops through a static message from RAM and outputs information
-// to serial
 
 extern double T1Wh;
 extern double SumWh; 
 extern double T1cur;
+extern double T1cur_old;
+
+extern char floatBuffer[20];
 
 typedef struct {
   const unsigned char OBIS[6];

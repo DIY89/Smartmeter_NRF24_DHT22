@@ -3,7 +3,7 @@
 
 #include <nrf_data.h>
 
-#define NODE_ID 1
+#define NODE_ID 2
 #define MAX_NODE_ID 255
 #define MAX_SENSOR_ID 4
 #define MAX_SENSOR_TYPE 6

@@ -1,11 +1,15 @@
 #include <sml_data.h>
 
+#undef DEBUG 
+
 double T1Wh = -2;
 double SumWh = -2; 
 double T1cur = -2;
+double T1cur_old = -2;
 
 char sml_data[MAX_BUF_SIZE];
 unsigned char manuf[MAX_STR_MANUF];
+char floatBuffer[20];
 
 void PowerT1(){ 
   smlOBISWh(T1Wh); 
@@ -37,7 +41,7 @@ void init_sml_data(){
 }
 
 void read_sml_data(){
-  char floatBuffer[20];
+  
   unsigned int i = 0, iHandler = 0;
   unsigned char c;
   sml_states_t s;
@@ -50,9 +54,9 @@ void read_sml_data(){
   }
 
   if (new_data == true) {
-#if defined(DEBUG)
-    Serial.println("new data available");
-#endif
+
+    //Serial.println("new data");
+
     for (i = 0; i < sizeof(sml_data); ++i) {
       c = sml_data[i];
       s = smlState(c);
@@ -74,12 +78,18 @@ void read_sml_data(){
           //Serial.println("Handler");
         }
       }
-#if defined(DEBUG)
+      
       if (s == SML_UNEXPECTED) {
         //Serial.print(F(">>> Unexpected byte! <<<\n"));
       }
 
       if (s == SML_FINAL) {
+
+        //Serial.print(F("Power Currently    (1-0:16.7.0)..: "));
+        dtostrf(T1cur, 10, 3, floatBuffer);
+        //Serial.println(floatBuffer);
+        
+#if defined(DEBUG)        
         Serial.println("SML_FINAL");
 
         Serial.print(F(">>> Manufacturer :"));
@@ -100,8 +110,9 @@ void read_sml_data(){
         dtostrf(T1cur, 10, 3, floatBuffer);
         Serial.print(floatBuffer);
         Serial.print(F("\n\n\n\n"));
+#endif      
       }
-#endif
+
     }
     new_data = false;
   }
